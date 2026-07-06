@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  robot-test:
+    build: .
+    container_name: qa-orangehrm
+    # Îi spunem "no" ca să ruleze testul o singură dată și să se oprească, nu la nesfârșit.
+    restart: "no"
