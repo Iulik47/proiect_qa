@@ -1,0 +1,40 @@
+name: Suita QA Automata OrangeHRM
+
+# Când se declanșează acest pipeline? (Trigger)
+on:
+  push:
+    branches: [ main ] # Rulează automat de fiecare dată când trimitem cod nou pe ramura main
+
+jobs:
+  executie-teste:
+    runs-on: ubuntu-latest # Sistemul de operare împrumutat de la GitHub
+    
+    steps:
+    - name: 1. Aducem codul din repository
+      uses: actions/checkout@v4
+
+    - name: 2. Instalam mediul Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: 3. Instalam librariile (Pytest & Playwright)
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-playwright pytest-html
+
+    - name: 4. Instalam browserul ascuns (Chromium)
+      run: playwright install chromium
+
+    - name: 5. Rulam suita de teste E2E
+      # ATENȚIE: Verifică dacă fișierul tău se numește test_suite.py sau test_suita.py
+      # În comanda de mai jos am pus test_suite.py cum am văzut în poza ta anterioară.
+      run: pytest test_suite.py --html=raport_final.html --self-contained-html
+
+    - name: 6. Salvam Raportul HTML (Artifact)
+      uses: actions/upload-artifact@v4
+      if: always() # Salvează raportul chiar dacă un test din cele 5 a picat
+      with:
+        name: Raport-Testare-QA
+        path: raport_final.html
+        retention-days: 7
