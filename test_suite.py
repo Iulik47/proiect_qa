@@ -1,4 +1,5 @@
 import re
+import time
 from playwright.sync_api import Page, expect
 
 # ---------------------------------------------------------
@@ -66,7 +67,11 @@ def test_e2e_employee_lifecycle(page: Page):
     page.get_by_role("link", name="Add Employee").click()
     page.get_by_placeholder("First Name").fill("Ion")
     page.get_by_placeholder("Last Name").fill("Popescu")
+    id_unic = str(int(time.time()))
+    camp_id = page.locator(".oxd-input-group").filter(has_text="Employee Id").locator("input")
+    camp_id.fill(id_unic)
     page.get_by_role("button", name="Save").click()
+    expect(page.locator(".oxd-toast-content--success")).to_be_visible(timeout=10000)
     expect(page.locator("h6:has-text('Personal Details')")).to_be_visible(timeout=15000)
 
     # Modificare Date
@@ -86,3 +91,9 @@ def test_e2e_employee_lifecycle(page: Page):
     page.locator("button.oxd-button--label-danger").click()
     
     expect(page.locator(".oxd-toast-content--success")).to_be_visible(timeout=10000)
+
+def test_intentionat_gresit_pentru_raport(page: Page):
+    page.goto("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
+    
+    # Îi cerem robotului să găsească un buton inventat, care NU există în pagină
+    expect(page.locator("#buton-fictiv-pentru-qa")).to_be_visible(timeout=3000)

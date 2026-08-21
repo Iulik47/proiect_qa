@@ -4,6 +4,8 @@ name: Suita QA Automata OrangeHRM
 on:
   push:
     branches: [ main ] # Rulează automat de fiecare dată când trimitem cod nou pe ramura main
+  pull_request:
+    branches: [main]
 
 jobs:
   executie-teste:
