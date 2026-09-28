@@ -1,5 +1,6 @@
 import re
 import time
+import pytest
 from playwright.sync_api import Page, expect
 
 # ---------------------------------------------------------
@@ -92,6 +93,7 @@ def test_e2e_employee_lifecycle(page: Page):
     
     expect(page.locator(".oxd-toast-content--success")).to_be_visible(timeout=10000)
 
+@pytest.mark.xfail(reason="Test intenționat greșit, pentru demonstrarea raportului", strict=True)
 def test_intentionat_gresit_pentru_raport(page: Page):
     page.goto("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
     
