@@ -1,5 +1,8 @@
-venv/
+# Ce NU intra in imaginea Docker
+.git
+.github
 .env
+venv/
 __pycache__/
 .pytest_cache/
 test-results/
